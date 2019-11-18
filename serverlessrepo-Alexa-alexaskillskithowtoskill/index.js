@@ -17,29 +17,25 @@ const Quotes = {
 };
 
 // Bookmarked Places and their coordinates
-// Future Upgrade - make them come from a database like DynamoDB
-// NOTE: All entries to be in lower case, and no space between coordinates
 const Bookmarks = {
     "my_office": "43.649173,-79.381783",
     "my_grocery_store": "43.651959,-79.366269",
     "my_car_dealership": "43.654068,-79.359832"
     
 };
-// User and Google API configuration related variables
-// 1. Setting Coordinates for your home/origin
+// 1. Setting Coordinates for home/origin
 var user_origin = "43.647751,-79.379973";
 var user_destination = "XXXXXX"; // keep it as XXXXXX as it will be replaced later
 
 // 2. Google Maps Directions API Related Data
 // 2a. API Key - Unique for every user
-var google_api_key = "AIzaSyDEIQeqy9UttIukS0LGuCyiFE0ev5IdN0g";
+var google_api_key = "INSERT GOOGLE API KEY";
 
 // 2b. Setting the configurable options for the API
-var google_api_traffic_model = "best_guess"; // it can be optimistic & pessimistic too
-var google_api_departure_time = "now"; // now will mean the current time
+var google_api_traffic_model = "best_guess"; 
+var google_api_departure_time = "now";
 
 // 2c. Deconstructing the API URL
-// https://maps.googleapis.com/maps/api/directions/json?origin=40.745908,-73.946989&traffic_model=best_guess&key=AIzaSyBz7jVWlbfCrns-aeLFs6cNd51rBmK2dOE&departure_time=now
 var google_api_host = "maps.googleapis.com";
 var google_api_path = "/maps/api/directions/json?origin=" +
   user_origin +
@@ -64,7 +60,6 @@ const LaunchRequestHandler = {
       let repromptText = "Sorry, I did not receive any input. Do you need help?";
       
       // Setting the attributes property for data persistence
-      // If the user says "Yes" to the repromptText question, the script will know what to do next
       handlerInput.attributesManager.setSessionAttributes({ type: "help"});
       
       return handlerInput.responseBuilder
@@ -144,9 +139,7 @@ const GetBookmarks = {
     let keys = Object.keys(Bookmarks);
     let destinations = "";
     
-    // Now iterate through the array and create a statement of places
     for (let i=0; i<keys.length; i++) {
-      // OPTIONAL: if it is the last destination, add the keyword "and"
       if (i==keys.length-1) {
         destinations += " and ";
       }
@@ -323,7 +316,6 @@ const GetRoute = {
    
    console.log("Destination is not blank");
    
-   // Prepare the final google API path
    // replacing XXXXXX (user_destination variable) with a url encoded version of the actual destination
    let final_api_path = google_api_path.replace(user_destination, encodeURIComponent(destination));
    
@@ -349,7 +341,6 @@ const GetRoute = {
         // Get the duration in traffic from the json array
         let duration = jsondata.routes[0].legs[0].duration_in_traffic.text;
         
-        // Google API returns "min" in response. Replace the "min" with "minute" (OPTIONAL)
         // duration = duration.replace("min","minute");
         
         // Get the value in seconds too so that you can do the time calculation
