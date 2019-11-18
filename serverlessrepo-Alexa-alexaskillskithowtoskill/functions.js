@@ -85,7 +85,7 @@ const myfunctions = {
         request.write(postData);
       }
       
-      // End the request. It's Important
+      // End the request.
       request.end();
     }); // promise ends
   }
